@@ -1,0 +1,637 @@
+
+    <!DOCTYPE html>
+    <html lang="en" class="bg-white text-slate-900 antialiased">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Personal Finance Manager</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body class="min-h-screen bg-gray-50">
+        <div class="flex h-screen bg-gray-50">
+            <!-- Sidebar -->
+            <div class="w-64 bg-white shadow-md border-r border-gray-200">
+                <div class="p-4">
+                    <h1 class="text-2xl font-bold">Finance Manager</h1>
+                </div>
+                <nav class="mt-4">
+                    <button onclick="showSection('overview', event)" class="nav-button flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Overview
+                    </button>
+                    <button onclick="showSection('input')" class="nav-button flex items-center w-full px-4 py-2 text-left hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        Update Info
+                    </button>
+                    <button onclick="showSection('budgeting')" class="nav-button flex items-center w-full px-4 py-2 text-left hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="8 12 12 16 16 12"></polyline>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                        </svg>
+                        Budgeting
+                    </button>
+                    <button onclick="showSection('expenses')" class="nav-button flex items-center w-full px-4 py-2 text-left hover:bg-gray-100">
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                        Expenses
+                    </button> -->
+                    <button onclick="showSection('goals')" class="nav-button flex items-center w-full px-4 py-2 text-left hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="22" y1="12" x2="18" y2="12"></line>
+                            <line x1="6" y1="12" x2="2" y2="12"></line>
+                            <line x1="12" y1="6" x2="12" y2="2"></line>
+                            <line x1="12" y1="22" x2="12" y2="18"></line>
+                        </svg>
+                        Goals
+                    </button>
+                    <button onclick="showSection('investments')" class="nav-button flex items-center w-full px-4 py-2 text-left hover:bg-gray-100">
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        Investments
+                    </button> -->
+                    <button onclick="showSection('reports')" class="nav-button flex items-center w-full px-4 py-2 text-left hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="20" x2="12" y2="10"></line>
+                            <line x1="18" y1="20" x2="18" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                        </svg>
+                        Reports
+                    </button>
+                </nav>
+            </div>
+    
+            <!-- Main content -->
+            <div class="flex-1 overflow-auto">
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 id="section-title" class="text-3xl font-bold text-gray-900">Overview</h2>
+                        <a href="auth.html" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">
+                            Login
+                        </a>
+                    </div>
+    
+                    <!-- Overview Section -->
+                    <div id="overview" class="section space-y-4">
+                        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                <div class="flex items-center justify-between pb-2">
+                                    <h3 class="text-sm font-medium text-gray-600">Total Balance</h3>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    </svg>
+                                </div>
+                                <div class="text-2xl font-bold text-gray-900">$<span id="total-balance">2000</span></div>
+                                <p class="text-xs text-gray-500">+20.1% from last month</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                <div class="flex items-center justify-between pb-2">
+                                    <h3 class="text-sm font-medium">Expenses</h3>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                                    </svg>
+                                </div>
+                                <div class="text-2xl font-bold">$<span id="total-expenses">3000</span></div>
+                                <p class="text-xs text-gray-500">+180.1% from last month</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                <div class="flex items-center justify-between pb-2">
+                                    <h3 class="text-sm font-medium">Savings</h3>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="22" y1="12" x2="18" y2="12"></line>
+                                        <line x1="6" y1="12" x2="2" y2="12"></line>
+                                        <line x1="12" y1="6" x2="12" y2="2"></line>
+                                        <line x1="12" y1="22" x2="12" y2="18"></line>
+                                    </svg>
+                                </div>
+                                <div class="text-2xl font-bold">$<span id="total-savings">1000</span></div>
+                                <p class="text-xs text-gray-500">+19% from last month</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                <div class="flex items-center justify-between pb-2">
+                                    <h3 class="text-sm font-medium">Investments</h3>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="text-2xl font-bold">$<span id="total-investments">1000</span></div>
+                                <p class="text-xs text-gray-500">+201 since last month</p>
+                            </div>
+                        </div>
+                        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                            <div class="bg-white p-4 rounded-lg shadow col-span-4">
+                                <h3 class="font-bold mb-2">Financial Overview</h3>
+                                <div class="h-[200px] w-full bg-gray-200 rounded-md flex items-center justify-center">
+                                    <canvas id="financialOverviewChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow col-span-3">
+                                <h3 class="font-bold mb-2">Recent Transactions</h3>
+                                <p class="text-sm text-gray-500 mb-4">You made 10 transactions this month.</p>
+                                <div id="recent-transactions" class="space-y-4">
+                                    <!-- Transactions will be dynamically added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Update Info Section -->
+                    <div id="input" class="section hidden">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-bold mb-4">Update Financial Information</h3>
+                            <form id="financial-form" class="space-y-4">
+                                <div>
+                                    <label for="income" class="block text-sm font-medium text-gray-700">Monthly Income</label>
+                                    <input type="number" id="income" name="income" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                </div>
+                                <div>
+                                    <label for="expenses" class="block text-sm font-medium text-gray-700">Monthly Expenses</label>
+                                    <input type="number" id="expenses" name="expenses" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                </div>
+                                <div>
+                                    <label for="savings" class="block text-sm font-medium text-gray-700">Monthly Savings</label>
+                                    <input type="number" id="savings" name="savings" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                </div>
+                                <div>
+                                    <label for="investments"   class="block text-sm font-medium text-gray-700">Monthly Investments</label>
+                                    <input type="number" id="investments" name="investments" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                </div>
+                                <button type="submit" class="w-full px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">Update Financial Information</button>
+                            </form>
+                        </div>
+                    </div>
+    
+                    <!-- Budgeting Section -->
+                    <div id="budgeting" class="section hidden">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-bold mb-4">Budgeting Tool</h3>
+                            <div id="budget-categories" class="space-y-4">
+                                <!-- Budget categories will be dynamically added here -->
+                            </div>
+                            <div class="mt-6">
+                                <h4 class="text-lg font-semibold mb-2">Add New Budget Category</h4>
+                                <form id="add-budget-category-form" class="space-y-4">
+                                    <div>
+                                        <label for="category-name" class="block text-sm font-medium text-gray-700">Category Name</label>
+                                        <input type="text" id="category-name" name="category-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                    </div>
+                                    <div>
+                                        <label for="category-budget" class="block text-sm font-medium text-gray-700">Budget Amount</label>
+                                        <input type="number" id="category-budget" name="category-budget" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                    </div>
+                                    <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">Add Category</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Expenses Section -->
+                    <div id="expenses" class="section hidden">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-bold mb-4">Expense Tracking</h3>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expense-list" class="bg-white divide-y divide-gray-200">
+                                    <!-- Expenses will be dynamically added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+    
+                    <!-- Goals Section -->
+                    <div id="goals" class="section hidden">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-bold mb-4">Financial Goals</h3>
+                            <div id="financial-goals" class="space-y-4">
+                                <!-- Financial goals will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Investments Section -->
+                    <div id="investments" class="section hidden">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-bold mb-4">Investment Tracking</h3>
+                            <table class="min-w-full divide-y divide-gray-200 mb-6">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Investment</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Returns</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="investment-list" class="bg-white divide-y divide-gray-200">
+                                    <!-- Investments will be dynamically added here -->
+                                </tbody>
+                            </table>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-2">Add New Investment</h4>
+                                <form id="add-investment-form" class="space-y-4">
+                                    <div>
+                                        <label for="investment-name" class="block text-sm font-medium text-gray-700">Investment Name</label>
+                                        <input type="text" id="investment-name" name="investment-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                    </div>
+                                    <div>
+                                        <label for="investment-amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                                        <input type="number" id="investment-amount" name="investment-amount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                    </div>
+                                    <div>
+                                        <label for="investment-returns" class="block text-sm font-medium text-gray-700">Expected Annual Returns (%)</label>
+                                        <input type="number" id="investment-returns" name="investment-returns" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring focus:ring-black focus:ring-opacity-20" required>
+                                    </div>
+                                    <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">Add Investment</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Reports Section -->
+                    <div id="reports" class="section hidden">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-bold mb-4">Reporting & Analytics</h3>
+                            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                    <h4 class="text-sm font-medium mb-2">Total Savings</h4>
+                                    <p class="text-2xl font-bold">$<span id="report-savings">0</span></p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                    <h4 class="text-sm font-medium mb-2">Monthly Income</h4>
+                                    <p class="text-2xl font-bold">$<span id="report-income">0</span></p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                    <h4 class="text-sm font-medium mb-2">Monthly Expenses</h4>
+                                    <p class="text-2xl font-bold">$<span id="report-expenses">0</span></p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                    <h4 class="text-sm font-medium mb-2">Net Worth</h4>
+                                    <p class="text-2xl font-bold">$<span id="report-net-worth">0</span></p>
+                                </div>
+                            </div>
+                            <div class="mt-6 h-[300px] w-full bg-gray-200 rounded-md flex items-center justify-center">
+                                <canvas id="analyticsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script>
+            // Financial data
+            let financialData = {
+                income: 5000,
+                expenses: 3000,
+                savings: 1000,
+                investments: 1000
+            };
+    
+            let budgetCategories = [
+                { name: 'Housing', budget: 1500, spent: 1200 },
+                { name: 'Food', budget: 500, spent: 450 },
+                { name: 'Transportation', budget: 300, spent: 280 },
+                { name: 'Entertainment', budget: 200, spent: 150 }
+            ];
+    
+            let investments = [
+                { name: 'Stock A', amount: 5000, returns: 250 },
+                { name: 'Bond B', amount: 3000, returns: 90 },
+                { name: 'ETF C', amount: 2000, returns: 100 }
+            ];
+    
+            // Update financial information
+            document.getElementById('financial-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                financialData.income = parseFloat(document.getElementById('income').value);
+                financialData.expenses = parseFloat(document.getElementById('expenses').value);
+                financialData.savings = parseFloat(document.getElementById('savings').value);
+                financialData.investments = parseFloat(document.getElementById('investments').value);
+                updateOverview();
+                updateReports();
+            });
+    
+            // Update overview section
+            function updateOverview() {
+                document.getElementById('total-balance').textContent = (financialData.income - financialData.expenses).toFixed(2);
+                document.getElementById('total-expenses').textContent = financialData.expenses.toFixed(2);
+                document.getElementById('total-savings').textContent = financialData.savings.toFixed(2);
+                document.getElementById('total-investments').textContent = financialData.investments.toFixed(2);
+            }
+    
+            // Update reports section
+            function updateReports() {
+                document.getElementById('report-savings').textContent = financialData.savings.toFixed(2);
+                document.getElementById('report-income').textContent = financialData.income.toFixed(2);
+                document.getElementById('report-expenses').textContent = financialData.expenses.toFixed(2);
+                document.getElementById('report-net-worth').textContent = (financialData.income - financialData.expenses + financialData.savings + financialData.investments).toFixed(2);
+                updateAnalyticsChart();
+            }
+    
+            // Show selected section
+            function showSection(sectionId) {
+                document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
+                document.getElementById(sectionId).classList.remove('hidden');
+                document.getElementById('section-title').textContent = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+                document.querySelectorAll('.nav-button').forEach(button => button.classList.remove('bg-gray-200'));
+                event.currentTarget.classList.add('bg-gray-200');
+            }
+    
+            // Financial Overview Chart
+            var ctx = document.getElementById('financialOverviewChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Income',
+                        data: [3000, 3500, 3200, 3800, 3600, 4000],
+                        borderColor: 'rgb(75, 192, 192)',  // Teal color
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.1
+                    }, {
+                        label: 'Expenses',
+                        data: [2500, 2800, 2600, 3000, 2900, 3200],
+                        borderColor: 'rgb(255, 99, 132)',  // Pink color
+                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+    
+            // Analytics Chart
+            var analyticsCtx = document.getElementById('analyticsChart').getContext('2d');
+            var analyticsChart = new Chart(analyticsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Income', 'Expenses', 'Savings', 'Investments'],
+                    datasets: [{
+                        label: 'Financial Overview',
+                        data: [5000, 3000, 1000, 1000],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',  // Teal
+                            'rgba(255, 99, 132, 0.2)',  // Pink
+                            'rgba(255, 206, 86, 0.2)',  // Yellow
+                            'rgba(54, 162, 235, 0.2)'   // Blue
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+    
+            function updateAnalyticsChart() {
+                analyticsChart.data.datasets[0].data = [
+                    financialData.income,
+                    financialData.expenses,
+                    financialData.savings,
+                    financialData.investments
+                ];
+                analyticsChart.update();
+            }
+    
+            // Initialize page
+            updateOverview();
+            updateReports();
+    
+            // Add recent transactions
+            const transactions = [
+                { description: 'Grocery Shopping', amount: 150 },
+                { description: 'Utility Bill', amount: 200 },
+                { description: 'Restaurant Dinner', amount: 80 }
+            ];
+            const transactionsContainer = document.getElementById('recent-transactions');
+            transactions.forEach(transaction => {
+                const transactionElement = document.createElement('div');
+                transactionElement.className = 'flex items-center';
+                transactionElement.innerHTML = `
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium leading-none">${transaction.description}</p>
+                        <p class="text-sm text-muted-foreground">Transaction details</p>
+                    </div>
+                    <div class="ml-auto font-medium">-$${transaction.amount.toFixed(2)}</div>
+                `;
+                transactionsContainer.appendChild(transactionElement);
+            });
+    
+            // Add budget categories
+            function updateBudgetCategories() {
+                const budgetContainer = document.getElementById('budget-categories');
+                budgetContainer.innerHTML = '';
+                budgetCategories.forEach(category => {
+                    const categoryElement =  document.createElement('div');
+                    categoryElement.className = 'mb-4';
+                    const percentage = (category.spent / category.budget) * 100;
+                    categoryElement.innerHTML = `
+                        <div class="flex justify-between mb-1">
+                            <span>${category.name}</span>
+                            <span>$${category.spent} / $${category.budget}</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2.5">
+                            <div class="bg-black h-2.5 rounded-full" style="width: ${percentage}%"></div>
+                        </div>
+                    `;
+                    budgetContainer.appendChild(categoryElement);
+                });
+            }
+    
+            updateBudgetCategories();
+    
+            // Add new budget category
+            document.getElementById('add-budget-category-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('category-name').value;
+                const budget = parseFloat(document.getElementById('category-budget').value);
+                budgetCategories.push({ name, budget, spent: 0 });
+                updateBudgetCategories();
+                this.reset();
+            });
+    
+            // Add expenses
+            const expenses = [
+                { date: '2023-05-01', category: 'Food', amount: 50 },
+                { date: '2023-05-02', category: 'Transportation', amount: 30 },
+                { date: '2023-05-03', category: 'Entertainment', amount: 100 },
+                { date: '2023-05-04', category: 'Housing', amount: 1000 }
+            ];
+            const expenseList = document.getElementById('expense-list');
+            expenses.forEach(expense => {
+                const expenseRow = document.createElement('tr');
+                expenseRow.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${expense.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${expense.category}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$${expense.amount.toFixed(2)}</td>
+                `;
+                expenseList.appendChild(expenseRow);
+            });
+    
+            // Add financial goals
+            const financialGoals = [
+                { name: 'Emergency Fund', target: 10000, current: 5000 },
+                { name: 'Vacation', target: 5000, current: 2000 },
+                { name: 'New Car', target: 20000, current: 8000 }
+            ];
+            const goalsContainer = document.getElementById('financial-goals');
+            financialGoals.forEach(goal => {
+                const goalElement = document.createElement('div');
+                goalElement.className = 'mb-4';
+                const percentage = (goal.current / goal.target) * 100;
+                goalElement.innerHTML = `
+                    <div class="flex justify-between mb-1">
+                        <span>${goal.name}</span>
+                        <span>$${goal.current} / $${goal.target}</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2.5">
+                        <div class="bg-black h-2.5 rounded-full" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                goalsContainer.appendChild(goalElement);
+            });
+    
+            // Update investments
+            function updateInvestments() {
+                const investmentList = document.getElementById('investment-list');
+                investmentList.innerHTML = '';
+                investments.forEach((investment, index) => {
+                    const investmentRow = document.createElement('tr');
+                    investmentRow.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">${investment.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$${investment.amount.toFixed(2)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$${investment.returns.toFixed(2)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button onclick="deleteInvestment(${index})" class="text-gray-600 hover:text-black transition-colors">Delete</button>
+                        </td>
+                    `;
+                    investmentList.appendChild(investmentRow);
+                });
+            }
+    
+            updateInvestments();
+    
+            // Add new investment
+            document.getElementById('add-investment-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('investment-name').value;
+                const amount = parseFloat(document.getElementById('investment-amount').value);
+                const returns = parseFloat(document.getElementById('investment-returns').value);
+                investments.push({ name, amount, returns: (amount * returns / 100) });
+                updateInvestments();
+                this.reset();
+            });
+    
+            // Delete investment
+            function deleteInvestment(index) {
+                investments.splice(index, 1);
+                updateInvestments();
+            }
+      
+
+        // ... (previous JavaScript code remains unchanged) ...
+
+        // Show selected section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.remove('hidden');
+                document.getElementById('section-title').textContent = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+            } else {
+                console.error(`Section with id "${sectionId}" not found`);
+            }
+            document.querySelectorAll('.nav-button').forEach(button => button.classList.remove('bg-gray-200'));
+            event.currentTarget.classList.add('bg-gray-200');
+
+            // Update specific sections if needed
+            if (sectionId === 'expenses') {
+                updateExpenses();
+            } else if (sectionId === 'investments') {
+                updateInvestments();
+            }
+        }
+
+        // Update expenses
+        function updateExpenses() {
+            const expenseList = document.getElementById('expense-list');
+            expenseList.innerHTML = ''; // Clear existing expenses
+            expenses.forEach(expense => {
+                const expenseRow = document.createElement('tr');
+                expenseRow.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${expense.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${expense.category}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$${expense.amount.toFixed(2)}</td>
+                `;
+                expenseList.appendChild(expenseRow);
+            });
+        }
+
+        // Update investments
+        function updateInvestments() {
+            const investmentList = document.getElementById('investment-list');
+            investmentList.innerHTML = ''; // Clear existing investments
+            investments.forEach((investment, index) => {
+                const investmentRow = document.createElement('tr');
+                investmentRow.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${investment.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$${investment.amount.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$${investment.returns.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <button onclick="deleteInvestment(${index})" class="text-gray-600 hover:text-black transition-colors">Delete</button>
+                    </td>
+                `;
+                investmentList.appendChild(investmentRow);
+            });
+        }
+
+        // ... (rest of the JavaScript code remains unchanged) ...
+
+        // Initialize page
+        updateOverview();
+        updateReports();
+        updateBudgetCategories();
+        updateExpenses();
+        updateInvestments();
+    </script>
+</body>
+</html>
